@@ -10,19 +10,8 @@ dotenv.config();
 const PORT = 8000;
 const app = express();
 // 
-const allowedOrigins = [
-  'https://vision-ai-client-xi.vercel.app',
-  'https://vision-ai-server.vercel.app'
-];
-
 app.use(cors({
-  origin: (origin, callback) => {
-    if (allowedOrigins.includes(origin) || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   allowedHeaders: 'Content-Type, Authorization'
 }));
