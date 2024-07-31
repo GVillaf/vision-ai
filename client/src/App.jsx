@@ -88,7 +88,7 @@ const App = () => {
   return (
     <div className="app">
       <header className="app-header">
-        <img src="../public/Logo.webp" alt="Logo" className="app-logo" />
+        <img src="/Logo.webp" alt="Logo" className="app-logo" />
       </header>
       <section className="search-section">
         <div className="image-container">

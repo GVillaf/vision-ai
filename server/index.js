@@ -11,7 +11,7 @@ const PORT = 8000;
 const app = express();
 // 
 app.use(cors({
-  origin: '*',
+  origin: 'https://vision-ai-client-xi.vercel.app', 
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   allowedHeaders: 'Content-Type, Authorization'
 }));
