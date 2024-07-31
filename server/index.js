@@ -24,12 +24,8 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Obtener el nombre del archivo actual y el directorio
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Crear la carpeta 'uploads' si no existe
-const uploadDir = path.join(__dirname, 'uploads');
+// Usar el directorio temporal proporcionado por Vercel
+const uploadDir = '/tmp/uploads';
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
