@@ -4,25 +4,31 @@ import fs from "fs";
 import multer from "multer";
 import dotenv from "dotenv";
 import OpenAI from "openai";
-import path from 'path';
-
+import path from "path";
+import { fileURLToPath } from "url"; // Importa para manejar el directorio actual
 
 dotenv.config();
 
 const PORT = 8000;
 const app = express();
-// 
+
 app.use(cors({
-  origin: 'https://vision-ai-client-xi.vercel.app', 
+  origin: 'https://vision-ai-client-xi.vercel.app', // Asegúrate de que este sea el dominio correcto de tu cliente
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   allowedHeaders: 'Content-Type, Authorization'
 }));
+
 app.use(express.json());
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// Obtener el nombre del archivo actual y el directorio
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Crear la carpeta 'uploads' si no existe
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
@@ -30,7 +36,7 @@ if (!fs.existsSync(uploadDir)) {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads");
+    cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
@@ -48,7 +54,6 @@ app.post("/upload", (req, res) => {
       return res.status(500).json({ error: "Error uploading file" });
     }
     filePath = req.file.path;
-    // console.log("File uploaded successfully:", filePath);
     res.status(200).json({ filePath: filePath });
   });
 });
@@ -56,7 +61,6 @@ app.post("/upload", (req, res) => {
 app.post("/openai", async (req, res) => {
   try {
     const prompt = req.body.message;
-    // console.log("Prompt received:", prompt);
     const imageAsBase64 = fs.readFileSync(filePath, "base64");
 
     const response = await openai.chat.completions.create({
@@ -76,7 +80,6 @@ app.post("/openai", async (req, res) => {
         },
       ],
     });
-    // console.log("OpenAI response:", response.choices[0]);
     res.send(response.choices[0].message.content);
   } catch (err) {
     console.error("Error processing OpenAI request:", err);
