@@ -4,6 +4,8 @@ import fs from "fs";
 import multer from "multer";
 import dotenv from "dotenv";
 import OpenAI from "openai";
+import path from 'path';
+
 
 dotenv.config();
 
